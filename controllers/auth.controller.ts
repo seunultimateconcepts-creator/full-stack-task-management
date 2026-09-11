@@ -1,17 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-
-const authService: {
-  registerUser: (payload: any) => Promise<any>;
-  loginUser: (payload: any) => Promise<any>;
-  refreshAccessToken: (refreshToken: string) => Promise<any>;
-  logoutUser: (userId: string, refreshToken: string) => Promise<void>;
-} = (() => {
-  try {
-    return require('../services/auth.service');
-  } catch {
-    return require('../services/authService');
-  }
-})();
+import * as authService from '../services/auth.service';
 
 export const register = async (req: Request, res: Response, next: NextFunction) => {
   try {
