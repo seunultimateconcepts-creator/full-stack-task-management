@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
+import { AuthRequest } from '../middlewares/auth.middleware';
 import * as authService from '../services/auth.service';
 
 export const register = async (req: Request, res: Response, next: NextFunction) => {
@@ -38,10 +39,10 @@ export const refresh = async (req: Request, res: Response, next: NextFunction) =
   }
 };
 
-export const logout = async (req: Request, res: Response, next: NextFunction) => {
+export const logout = async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     const { refreshToken } = req.body;
-    const userId = (req as any).user.id; // set by auth middleware
+    const userId = req.user!.id; // set by authenticate middleware, guaranteed present
     await authService.logoutUser(userId, refreshToken);
     res.status(200).json({ success: true, message: 'Logged out successfully' });
   } catch (err) {
